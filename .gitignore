@@ -25,3 +25,6 @@ _testmain.go
 
 # misc
 *.swp
+
+# generated binaries
+2fa
