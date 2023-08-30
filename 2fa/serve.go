@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/tristanwietsma/rsc/qr"
 	"log"
 	"net/http"
+
+	"rsc.io/qr"
 )
 
 func serve(qrs []*qr.Code) {

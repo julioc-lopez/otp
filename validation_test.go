@@ -1,9 +1,10 @@
 package otp
 
 import (
-	"code.google.com/p/go.crypto/md4"
 	"crypto/sha1"
 	"testing"
+
+	"golang.org/x/crypto/md4"
 )
 
 var BadKeys = []Key{

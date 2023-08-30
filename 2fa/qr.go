@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+
+	"rsc.io/qr"
+
 	"github.com/tristanwietsma/otp"
-	"github.com/tristanwietsma/rsc/qr"
 )
 
 type qrCommand struct{}
