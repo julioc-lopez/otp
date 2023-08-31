@@ -7,6 +7,7 @@ import (
 	"encoding/binary"
 	"hash"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -30,7 +31,7 @@ func GetInterval(period int64) (int64, int64) {
 // Example:
 //      code, err := GetCode("MFRGGZDFMZTWQ2LK", 1, sha1.New, 6)
 func GetCode(secret32 string, iv int64, h Hash, digits int) (string, error) {
-	key, err := base32.StdEncoding.DecodeString(secret32)
+	key, err := base32.StdEncoding.DecodeString(strings.ToUpper(secret32))
 	if err != nil {
 		return "", err
 	}
