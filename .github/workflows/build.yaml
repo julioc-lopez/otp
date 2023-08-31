@@ -1,13 +1,13 @@
 name: Build
 
- on:
-   push:
-     branches: [ local, local-dev ]
-   pull_request:
-     branches: [ local, local-dev ]
+on:
+  push:
+    branches: [ local, local-dev ]
+  pull_request:
+    branches: [ local, local-dev ]
 
- jobs:
-   build:
+jobs:
+  build:
     runs-on: ubuntu-latest
     steps:
     -
