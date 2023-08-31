@@ -7,25 +7,25 @@ import (
 
 func (k Key) hasValidMethod() error {
 	if !stringInSlice(k.Method, methods) {
-		return errors.New("Invalid method value")
+		return errors.New("invalid method value")
 	}
 	return nil
 }
 
 func (k Key) hasValidLabel() error {
 	if len(k.Label) == 0 {
-		return errors.New("Missing value for label")
+		return errors.New("missing value for label")
 	}
 	return nil
 }
 
 func (k Key) hasValidSecret32() error {
 	if len(k.Secret32) == 0 {
-		return errors.New("Missing value for secret")
+		return errors.New("missing value for secret")
 	}
 
 	if _, err := base32.StdEncoding.DecodeString(k.Secret32); err != nil {
-		return errors.New("Invalid Base32 value for secret")
+		return errors.New("invalid Base32 value for secret")
 	}
 
 	return nil
@@ -33,21 +33,21 @@ func (k Key) hasValidSecret32() error {
 
 func (k Key) hasValidAlgo() error {
 	if !hashInSlice(k.Algo, Hashes) {
-		return errors.New("Invalid hashing algorithm")
+		return errors.New("invalid hashing algorithm")
 	}
 	return nil
 }
 
 func (k Key) hasValidDigits() error {
 	if !(k.Digits == 6 || k.Digits == 8) {
-		return errors.New("Digit is not equal to 6 or 8")
+		return errors.New("digit is not equal to 6 or 8")
 	}
 	return nil
 }
 
 func (k Key) hasValidPeriod() error {
 	if k.Method == "totp" && k.Period < 1 {
-		return errors.New("Period can not have a non-positive value")
+		return errors.New("period can not have a non-positive value")
 	}
 	return nil
 }
