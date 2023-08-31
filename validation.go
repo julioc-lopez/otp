@@ -5,21 +5,21 @@ import (
 	"errors"
 )
 
-func (k Key) hasValidMethod() error {
+func (k Key) validateMethod() error {
 	if !stringInSlice(k.Method, methods) {
 		return errors.New("invalid method value")
 	}
 	return nil
 }
 
-func (k Key) hasValidLabel() error {
+func (k Key) validateLabel() error {
 	if len(k.Label) == 0 {
 		return errors.New("missing value for label")
 	}
 	return nil
 }
 
-func (k Key) hasValidSecret32() error {
+func (k Key) validateSecret32() error {
 	if len(k.Secret32) == 0 {
 		return errors.New("missing value for secret")
 	}
@@ -31,21 +31,21 @@ func (k Key) hasValidSecret32() error {
 	return nil
 }
 
-func (k Key) hasValidAlgo() error {
+func (k Key) validateAlgo() error {
 	if !hashInSlice(k.Algo, Hashes) {
 		return errors.New("invalid hashing algorithm")
 	}
 	return nil
 }
 
-func (k Key) hasValidDigits() error {
+func (k Key) validateDigits() error {
 	if !(k.Digits == 6 || k.Digits == 8) {
 		return errors.New("digit is not equal to 6 or 8")
 	}
 	return nil
 }
 
-func (k Key) hasValidPeriod() error {
+func (k Key) validatePeriod() error {
 	if k.Method == "totp" && k.Period < 1 {
 		return errors.New("period can not have a non-positive value")
 	}
@@ -57,32 +57,32 @@ func (k Key) hasValidPeriod() error {
 func (k Key) Validate() error {
 
 	// check method
-	if err := k.hasValidMethod(); err != nil {
+	if err := k.validateMethod(); err != nil {
 		return err
 	}
 
 	//check label
-	if err := k.hasValidLabel(); err != nil {
+	if err := k.validateLabel(); err != nil {
 		return err
 	}
 
 	// check secret
-	if err := k.hasValidSecret32(); err != nil {
+	if err := k.validateSecret32(); err != nil {
 		return err
 	}
 
 	// check algo
-	if err := k.hasValidAlgo(); err != nil {
+	if err := k.validateAlgo(); err != nil {
 		return err
 	}
 
 	// check digits
-	if err := k.hasValidDigits(); err != nil {
+	if err := k.validateDigits(); err != nil {
 		return err
 	}
 
 	// check period
-	if err := k.hasValidPeriod(); err != nil {
+	if err := k.validatePeriod(); err != nil {
 		return err
 	}
 
