@@ -55,35 +55,17 @@ func (k Key) validatePeriod() error {
 // Validate checks if the key parameters conform to the specification.
 // In invalid, an error is returns.
 func (k Key) Validate() error {
-
-	// check method
-	if err := k.validateMethod(); err != nil {
-		return err
-	}
-
-	//check label
-	if err := k.validateLabel(); err != nil {
-		return err
-	}
-
-	// check secret
-	if err := k.validateSecret32(); err != nil {
-		return err
-	}
-
-	// check algo
-	if err := k.validateAlgo(); err != nil {
-		return err
-	}
-
-	// check digits
-	if err := k.validateDigits(); err != nil {
-		return err
-	}
-
-	// check period
-	if err := k.validatePeriod(); err != nil {
-		return err
+	for _, v := range []func() error{
+		k.validateMethod,
+		k.validateLabel,
+		k.validateSecret32,
+		k.validateAlgo,
+		k.validateDigits,
+		k.validatePeriod,
+	} {
+		if err := v(); err != nil {
+			return err
+		}
 	}
 
 	return nil
