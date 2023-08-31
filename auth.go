@@ -29,7 +29,8 @@ func GetInterval(period int64) (int64, int64) {
 // The digits parameter is the length of returned code.
 //
 // Example:
-//      code, err := GetCode("MFRGGZDFMZTWQ2LK", 1, sha1.New, 6)
+//
+//	code, err := GetCode("MFRGGZDFMZTWQ2LK", 1, sha1.New, 6)
 func GetCode(secret32 string, iv int64, h Hash, digits int) (string, error) {
 	key, err := base32.StdEncoding.DecodeString(strings.ToUpper(secret32))
 	if err != nil {
