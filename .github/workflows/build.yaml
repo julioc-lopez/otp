@@ -1,0 +1,28 @@
+name: Build
+
+ on:
+   push:
+     branches: [ local, local-dev ]
+   pull_request:
+     branches: [ local, local-dev ]
+
+ jobs:
+   build:
+    runs-on: ubuntu-latest
+    steps:
+    -
+      uses: actions/checkout@v3
+      with:
+        lfs: 'true'
+    -
+      name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version-file: 'go.mod'
+    -
+      name: Build
+      run: go build ./cmd/2fa
+
+    -
+      name: Test
+      run: go test .
