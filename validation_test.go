@@ -4,7 +4,8 @@ import (
 	"crypto/sha1"
 	"testing"
 
-	"golang.org/x/crypto/md4"
+	//lint:ignore SA1019 only used for testing
+	"golang.org/x/crypto/md4" //nolint:staticcheck
 )
 
 var BadKeys = []Key{
