@@ -3,6 +3,7 @@ package otp
 import (
 	"encoding/base32"
 	"errors"
+	"strings"
 )
 
 func (k Key) validateMethod() error {
@@ -24,7 +25,7 @@ func (k Key) validateSecret32() error {
 		return errors.New("missing value for secret")
 	}
 
-	if _, err := base32.StdEncoding.DecodeString(k.Secret32); err != nil {
+	if _, err := base32.StdEncoding.DecodeString(strings.ToUpper(k.Secret32)); err != nil {
 		return errors.New("invalid Base32 value for secret")
 	}
 
