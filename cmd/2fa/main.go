@@ -28,16 +28,12 @@ Usage:
 
         2fa command [arguments]
 
-The commands are:
-`)
+The commands are:`)
 	for _, c := range commands {
 		c.Usage()
 	}
 
-	fmt.Println(
-		`
-Use "2fa help [command]" for more information about a command.
-`)
+	fmt.Println("\nUse `2fa help [command]` for more information about a command.")
 }
 
 func main() {
@@ -66,7 +62,7 @@ func main() {
 	// help
 	if args[0] == "help" {
 		if flag.NArg() != 2 {
-			fmt.Println("\nhelp usage:\n\n    2fa help [command]\n")
+			fmt.Println("\nhelp usage:\n\n    2fa help [command]")
 			return
 		}
 		for _, cmd := range commands {
