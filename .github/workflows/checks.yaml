@@ -1,0 +1,62 @@
+name: "Static Checks"
+
+on:
+  push:
+    branches: [ local, local-dev ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ local, local-dev ]
+#  schedule:
+#    - cron: '35 10 10 * *'
+
+jobs:
+  checks:
+    name: Checks
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+    -
+      name: Check out repository
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+    -
+      id: setup_go
+      name: Setup Go
+      uses: actions/setup-go@0aaccfd150d50ccaeb58ebd88d36e91967a5f35b # v5.4.0
+      with:
+        cache: true
+        check-latest: true
+        go-version-file: 'go.mod'
+    -
+      id: govulncheck
+      name: govulncheck
+      uses: golang/govulncheck-action@b625fbe08f3bccbe446d94fbf87fcc875a4f50ee # v1.0.4
+      with:
+        cache: false
+        go-version-input:
+        go-version-file: 'go.mod'
+        repo-checkout: false
+    -
+      id: build
+      name: Build
+      if: ${{ !cancelled() && steps.setup_go.conclusion == 'success' }}
+      run: go build ./...
+    -
+      name: staticcheck
+      uses: dominikh/staticcheck-action@fe1dd0c3658873b46f8c9bb3291096a617310ca6 # v1.3.1
+      if: ${{ !cancelled() && steps.build.conclusion == 'success' }}
+      with:
+        version: "2023.1.5"
+        install-go: false
+    -
+      name: golangci-lint
+      if: ${{ !cancelled() && steps.build.conclusion == 'success' }}
+      uses: golangci/golangci-lint-action@1481404843c368bc19ca9406f87d6e0fc97bdcfd # v7.0.0
+      with:
+        version: v2.0.2
+        # skip-cache: true
+        # Use a long invalidation interval, the go.mod hash is more likely to
+        # change more frequently and force a cache invalidation anyway.
+        cache-invalidation-interval: 60
