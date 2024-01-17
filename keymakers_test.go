@@ -21,7 +21,7 @@ func TestNewTOTPKey(t *testing.T) {
 func TestNewBadTotp(t *testing.T) {
 	if _, err := NewTOTPKey(
 		"label",
-		"MifdasfsfdsfFRGGZDFMZTWQ2LK",
+		"MifdasfsfdsfFRGGZDFMZTWQ2LK0",
 		"issuer",
 		sha1.New,
 		6,
