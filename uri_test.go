@@ -13,48 +13,51 @@ type CheckPair struct {
 	U string
 }
 
-var pairs = []CheckPair{
-	{
-		K: Key{
-			Method:   "totp",
-			Label:    "label",
-			Secret32: "MFRGGZDFMZTWQ2LK",
-			Issuer:   "issuer",
-			Algo:     sha1.New,
-			Digits:   6,
-			Period:   30,
-		},
-		U: "otpauth://totp/label?algo=sha1&digits=6&issuer=issuer&period=30&secret=MFRGGZDFMZTWQ2LK",
-	},
-	{
-		K: Key{
-			Method:   "hotp",
-			Label:    "label",
-			Secret32: "MFRGGZDFMZTWQ2LK",
-			Issuer:   "issuer",
-			Algo:     sha1.New,
-			Digits:   6,
-			Counter:  42,
-		},
-		U: "otpauth://hotp/label?algo=sha1&counter=42&digits=6&issuer=issuer&secret=MFRGGZDFMZTWQ2LK",
-	},
-	{
-		K: Key{
-			Method:   "totp",
-			Label:    "Example:alice@google.com",
-			Secret32: "NAR5XTDD3EQU22YU",
-			Issuer:   "Example",
-			Algo:     sha1.New,
-			Digits:   6,
-			Period:   30,
-		},
-		U: "otpauth://totp/Example:alice@google.com?algo=sha1&digits=6&issuer=Example&period=30&secret=NAR5XTDD3EQU22YU",
-	},
-}
-
 func TestCheckPairs(t *testing.T) {
-	var theKey *Key
-	var err error
+	pairs := []CheckPair{
+		{
+			K: Key{
+				Method:   "totp",
+				Label:    "label",
+				Secret32: "MFRGGZDFMZTWQ2LK",
+				Issuer:   "issuer",
+				Algo:     sha1.New,
+				Digits:   6,
+				Period:   30,
+			},
+			U: "otpauth://totp/label?algo=sha1&digits=6&issuer=issuer&period=30&secret=MFRGGZDFMZTWQ2LK",
+		},
+		{
+			K: Key{
+				Method:   "hotp",
+				Label:    "label",
+				Secret32: "MFRGGZDFMZTWQ2LK",
+				Issuer:   "issuer",
+				Algo:     sha1.New,
+				Digits:   6,
+				Counter:  42,
+			},
+			U: "otpauth://hotp/label?algo=sha1&counter=42&digits=6&issuer=issuer&secret=MFRGGZDFMZTWQ2LK",
+		},
+		{
+			K: Key{
+				Method:   "totp",
+				Label:    "Example:alice@google.com",
+				Secret32: "NAR5XTDD3EQU22YU",
+				Issuer:   "Example",
+				Algo:     sha1.New,
+				Digits:   6,
+				Period:   30,
+			},
+			U: "otpauth://totp/Example:alice@google.com?algo=sha1&digits=6&issuer=Example&period=30&secret=NAR5XTDD3EQU22YU",
+		},
+	}
+
+	var (
+		theKey *Key
+		err    error
+	)
+
 	for _, p := range pairs {
 		if p.K.Method == "totp" {
 			theKey, err = NewTOTPKey(p.K.Label, p.K.Secret32, p.K.Issuer, p.K.Algo, p.K.Digits, p.K.Period)
