@@ -1,8 +1,10 @@
 package otp
 
 import (
+	"encoding/base32"
 	"reflect"
 	"runtime"
+	"strings"
 )
 
 // http://stackoverflow.com/a/7053871/3582177
@@ -26,4 +28,17 @@ func hashInSlice(a Hash, list []Hash) bool {
 		}
 	}
 	return false
+}
+
+var base32NoPadding = base32.StdEncoding.WithPadding(base32.NoPadding)
+
+func decodeBase32(s string) ([]byte, error) {
+	s = strings.ToUpper(s)
+
+	if b, err := base32NoPadding.DecodeString(s); err == nil {
+		return b, nil
+	}
+
+	// re-try allowing padding
+	return base32.StdEncoding.DecodeString(s)
 }
