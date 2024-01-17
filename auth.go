@@ -36,7 +36,7 @@ func GetCode(secret32 string, iv int64, h Hash, digits int) (string, error) {
 	}
 
 	msg := bytes.Buffer{}
-	binary.Write(&msg, binary.BigEndian, iv)
+	_ = binary.Write(&msg, binary.BigEndian, iv)
 
 	mac := hmac.New(h, key)
 	mac.Write(msg.Bytes())
