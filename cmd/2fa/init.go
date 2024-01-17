@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 )
 
@@ -13,10 +14,24 @@ func (c initCommand) Name() string {
 
 func (c initCommand) Run(args []string) bool {
 	path := getCfgPath()
-	if _, err := os.Open(path); err != nil {
-		f, _ := os.Create(path)
-		f.WriteString(
-			`# 2fa configuration
+	if f, err := os.Open(path); err == nil {
+		_ = f.Close()
+
+		return true
+	}
+
+	f, err := os.Create(path)
+
+	if err != nil {
+		log.Println("error creating init file:", path, err)
+
+		return false
+	}
+
+	defer f.Close()
+
+	_, err = f.WriteString(
+		`# 2fa configuration
 #
 # Example:
 #
@@ -24,7 +39,12 @@ func (c initCommand) Run(args []string) bool {
 # issuer = "The Issuer"
 # secret = <Base32 encoded secret key>
 `)
+	if err != nil {
+		log.Println("error writing config file:", path, err)
+
+		return false
 	}
+
 	return true
 }
 
