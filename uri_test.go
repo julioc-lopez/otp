@@ -13,8 +13,8 @@ type CheckPair struct {
 	U string
 }
 
-var Pairs = []CheckPair{
-	CheckPair{
+var pairs = []CheckPair{
+	{
 		K: Key{
 			Method:   "totp",
 			Label:    "label",
@@ -26,7 +26,7 @@ var Pairs = []CheckPair{
 		},
 		U: "otpauth://totp/label?algo=sha1&digits=6&issuer=issuer&period=30&secret=MFRGGZDFMZTWQ2LK",
 	},
-	CheckPair{
+	{
 		K: Key{
 			Method:   "hotp",
 			Label:    "label",
@@ -38,7 +38,7 @@ var Pairs = []CheckPair{
 		},
 		U: "otpauth://hotp/label?algo=sha1&counter=42&digits=6&issuer=issuer&secret=MFRGGZDFMZTWQ2LK",
 	},
-	CheckPair{
+	{
 		K: Key{
 			Method:   "totp",
 			Label:    "Example:alice@google.com",
@@ -55,7 +55,7 @@ var Pairs = []CheckPair{
 func TestCheckPairs(t *testing.T) {
 	var theKey *Key
 	var err error
-	for _, p := range Pairs {
+	for _, p := range pairs {
 		if p.K.Method == "totp" {
 			theKey, err = NewTOTPKey(p.K.Label, p.K.Secret32, p.K.Issuer, p.K.Algo, p.K.Digits, p.K.Period)
 		} else {
