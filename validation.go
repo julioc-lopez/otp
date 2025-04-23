@@ -38,7 +38,7 @@ func (k Key) validateAlgo() error {
 }
 
 func (k Key) validateDigits() error {
-	if !(k.Digits == 6 || k.Digits == 8) {
+	if k.Digits != 6 && k.Digits != 8 {
 		return errors.New("digit is not equal to 6 or 8")
 	}
 	return nil

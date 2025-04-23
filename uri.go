@@ -13,7 +13,6 @@ import (
 
 // ToURI returns the string representation of the Key.
 func (k Key) ToURI() string {
-
 	uri := url.URL{
 		Scheme: "otpauth",
 		Host:   k.Method,
@@ -47,9 +46,9 @@ func (k Key) ToURI() string {
 // Defaults are included for the hashing algorithm (sha1.New), digits (6), and period (30); these parameters may be excluded from the URI. The issuer is optional. For totp, only the method, label, and secret are required. See https://code.google.com/p/google-authenticator/wiki/KeyUriFormat for more information.
 //
 // Example:
-//      k.FromURI("otpauth://totp/Example:alice@google.com?algo=sha1&digits=6&issuer=Example&period=30&secret=NAR5XTDD3EQU22YU")
+//
+//	k.FromURI("otpauth://totp/Example:alice@google.com?algo=sha1&digits=6&issuer=Example&period=30&secret=NAR5XTDD3EQU22YU")
 func (k *Key) FromURI(uri string) error {
-
 	u, err := url.ParseRequestURI(uri)
 	if err != nil {
 		return err
@@ -92,7 +91,8 @@ func (k *Key) FromURI(uri string) error {
 		(*k).Digits = 6
 	}
 
-	if u.Host == "totp" {
+	switch u.Host {
+	case "totp":
 		period := params.Get("period")
 		if period != "" {
 			p, err := strconv.Atoi(period)
@@ -103,7 +103,7 @@ func (k *Key) FromURI(uri string) error {
 		} else {
 			(*k).Period = 30
 		}
-	} else if u.Host == "hotp" {
+	case "hotp":
 		counter := params.Get("counter")
 		if counter != "" {
 			c, err := strconv.Atoi(counter)

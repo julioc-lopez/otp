@@ -21,14 +21,17 @@ func (c initCommand) Run(args []string) bool {
 	}
 
 	f, err := os.Create(path)
-
 	if err != nil {
 		log.Println("error creating init file:", path, err)
 
 		return false
 	}
 
-	defer f.Close()
+	defer func() {
+		if err := f.Close(); err != nil {
+			log.Printf("error closing file %q: %s", path, err)
+		}
+	}()
 
 	_, err = f.WriteString(
 		`# 2fa configuration
