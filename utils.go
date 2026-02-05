@@ -5,6 +5,7 @@ import (
 	"reflect"
 	"runtime"
 	"strings"
+	"unicode"
 )
 
 // http://stackoverflow.com/a/7053871/3582177
@@ -33,12 +34,18 @@ func hashInSlice(a Hash, list []Hash) bool {
 var base32NoPadding = base32.StdEncoding.WithPadding(base32.NoPadding)
 
 func decodeBase32(s string) ([]byte, error) {
-	s = strings.ToUpper(s)
+	s = strings.Map(func(c rune) rune {
+		if c == '-' || unicode.IsSpace(c) {
+			return -1
+		}
 
-	if b, err := base32NoPadding.DecodeString(s); err == nil {
+		return unicode.ToUpper(c)
+	}, s)
+
+	if b, err := base32.StdEncoding.DecodeString(s); err == nil {
 		return b, nil
 	}
 
-	// re-try allowing padding
-	return base32.StdEncoding.DecodeString(s)
+	// re-try allowing truncated strings with no padding
+	return base32NoPadding.DecodeString(s)
 }
