@@ -9,9 +9,6 @@ import (
 	"time"
 )
 
-// Hash represents a function that returns a hash.Hash.
-type Hash func() hash.Hash
-
 // GetInterval returns the unix epoch divided by period and the number of seconds remaining till expiration.
 func GetInterval(period int64) (int64, int64) {
 	t := time.Now().Unix()

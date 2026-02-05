@@ -5,9 +5,13 @@ import (
 	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/sha512"
+	"hash"
 )
 
 var methods = []string{"totp", "hotp"}
+
+// Hash represents a function that returns a hash.Hash.
+type Hash func() hash.Hash
 
 // Supported hash algorithms.
 var Hashes = []Hash{sha1.New, sha256.New, sha512.New, md5.New}
