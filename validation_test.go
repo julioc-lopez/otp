@@ -2,11 +2,13 @@ package otp
 
 import (
 	"crypto/sha1"
+	"hash"
 	"testing"
-
-	//lint:ignore SA1019 only used for testing
-	"golang.org/x/crypto/md4" //nolint:staticcheck
 )
+
+func invalidTestHash() hash.Hash {
+	return nil
+}
 
 func TestBadKeys(t *testing.T) {
 	badKeys := []Key{
@@ -30,7 +32,7 @@ func TestBadKeys(t *testing.T) {
 			Label:    "t@w",
 			Secret32: "MFRGGZDFMZTWQ2LK",
 			Issuer:   "issuer",
-			Algo:     md4.New,
+			Algo:     invalidTestHash,
 		},
 		{
 			Method:   "totp",
