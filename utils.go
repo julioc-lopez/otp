@@ -4,6 +4,7 @@ import (
 	"encoding/base32"
 	"reflect"
 	"runtime"
+	"slices"
 	"strings"
 	"unicode"
 )
@@ -14,12 +15,7 @@ func getFuncName(i interface{}) string {
 }
 
 func stringInSlice(a string, list []string) bool {
-	for _, b := range list {
-		if b == a {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(list, a)
 }
 
 func hashInSlice(a Hash, list []Hash) bool {
