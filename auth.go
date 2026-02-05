@@ -1,11 +1,11 @@
 package otp
 
 import (
-	"bytes"
 	"crypto/hmac"
 	"encoding/binary"
+	"fmt"
 	"hash"
-	"strconv"
+	"log"
 	"time"
 )
 
@@ -35,25 +35,46 @@ func GetCode(secret32 string, iv int64, h Hash, digits int) (string, error) {
 		return "", err
 	}
 
-	msg := bytes.Buffer{}
-	_ = binary.Write(&msg, binary.BigEndian, iv)
+	var ivBuffer [8]byte
+
+	n, err := binary.Encode(ivBuffer[:], binary.BigEndian, iv)
+
+	assertNoError(err)
+	assert(n == len(ivBuffer))
 
 	mac := hmac.New(h, key)
-	mac.Write(msg.Bytes())
+
+	_, err = mac.Write(ivBuffer[:])
+	assertNoError(err)
+
 	digest := mac.Sum(nil)
-
 	offset := digest[len(digest)-1] & 0xF
-	trunc := digest[offset : offset+4]
 
-	var code int32
-	truncBytes := bytes.NewBuffer(trunc)
-	_ = binary.Read(truncBytes, binary.BigEndian, &code)
+	assert(len(digest) >= int(offset+4))
+	code := (binary.BigEndian.Uint32(digest[offset:offset+4]) & 0x7FFFFFFF)
 
-	code = (code & 0x7FFFFFFF) % 1000000
-
-	stringCode := strconv.Itoa(int(code))
-	for len(stringCode) < digits {
-		stringCode = "0" + stringCode
+	stringCode := fmt.Sprintf("%0*v", digits, code)
+	if cl := len(stringCode); cl > digits {
+		stringCode = stringCode[cl-digits:]
 	}
+
+	assert(len(stringCode) == digits)
+
 	return stringCode, nil
+}
+
+func assert(condition bool, msg ...any) {
+	if condition {
+		return
+	}
+
+	if len(msg) > 0 {
+		log.Fatalln(msg...)
+	}
+
+	log.Fatal("condition failed")
+}
+
+func assertNoError(err error) {
+	assert(err == nil, "unexepcted error:", err)
 }
