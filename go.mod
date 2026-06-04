@@ -1,8 +1,6 @@
 module github.com/tristanwietsma/otp
 
-go 1.25
-
-toolchain 1.25.11
+go 1.25.11
 
 require (
 	github.com/BurntSushi/toml v1.6.0
